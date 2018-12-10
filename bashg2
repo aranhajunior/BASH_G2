@@ -1,0 +1,97 @@
+#!/bin/bash
+#
+# Script do sistema de backup com o comando "rsync"
+# Autor: Alessandro Aranha
+# Data: 10/12/2018	
+# Inicio  do Case
+menu(){
+    clear
+
+    # Mostra informações de menu para operações do usuario, não é variagel, somente texto.
+    echo "Digite 1 - Para definir mm aquivo sozinho ou uma quantidade determinada de arquivos 
+para o backup"
+    echo "Digite 2 - Para definir uma pasta inteira para copiar, ou diversas pastas inteiras para 
+copiar"
+    echo "Digite 3 - Definir endereços que indiquem no sistema de arquivos onde estão os arquivos ou pastas a serem copiados" 
+    echo "Digite 4 - Definir IP e porta Socket de rede (IP + Porta)"
+    echo "Digite 5 - Conectar a uma máquina remota (ssh) definida."
+    echo "Digite 6 - Sair"
+
+    read opcao
+
+    # Parte do case que vincula o numero com o nome do segmento de funções.
+    case "$opcao" in
+    	1) 	definirbkp ;;
+
+    	2) 	copiarpasta ;;
+
+	3) 	mostrarlocal  ;;
+
+	4) 	definirip  ;;
+
+	5) 	conectarremot  ;;
+
+        6)
+    	    clear
+            sair
+        ;;
+    
+    	*)
+    	    clear
+    	    op_inv
+    	;;
+    esac
+}
+
+instalar(){
+    clear
+    echo "  ---  definirbkp  ---  "
+    sudo apt install openssh-server
+    read pause
+    menu
+}
+
+remover(){
+    clear
+   echo "  ---  copiarpasta  ---  "
+   sudo apt remove openssh-server -y
+    read pause
+    menu
+}
+
+mostrar local  (){
+    clear
+    echo "  ---  mostrarlocal  ---  "
+    # copiando arquivo para pasta tmp como backup
+    cp /etc/ssh/sshd_config /tmp/sshd_config.bkp
+    # exibe o arquivo da pasta tmp como bk
+    ls /tmp/*.bkp
+    echo "  ---  Copia concluida  ---  "
+    read pause
+
+    menu
+}
+
+
+
+conectarremot(){
+    clear
+   echo "  ---  Reiniciar  ---  "
+    echo " Digite um enderepo IP para conectar remoto:  "
+    read ipescolhido
+}
+
+
+sair(){
+    echo "Sair"
+    read pause
+    clear
+}
+
+op_inv(){
+    echo "Opcao invalida, retornando ao menu principal"
+    read pause
+    menu
+}
+
+menu
